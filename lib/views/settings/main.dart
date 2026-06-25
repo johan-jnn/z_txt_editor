@@ -51,10 +51,9 @@ class _SettingsState extends State<Settings> {
             children: [
               Text(
                 'Background Color',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               AdvancedColorPicker(
@@ -64,10 +63,9 @@ class _SettingsState extends State<Settings> {
               const Divider(height: 32),
               Text(
                 'Duck Overlay',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<DuckOverlayMode>(
@@ -76,7 +74,14 @@ class _SettingsState extends State<Settings> {
                   labelText: 'Mode',
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (mode) => _settings.setDuckMode(mode!),
+                onChanged: (mode) => {
+                  // If the duck mode has changed to fixedRandom
+                  if (_settings.duckMode != mode &&
+                      mode == DuckOverlayMode.fixedRandom)
+                    {_fetchNewDuck()},
+
+                  _settings.setDuckMode(mode!),
+                },
                 items: const [
                   DropdownMenuItem(
                     value: DuckOverlayMode.fullRandom,
